@@ -1,0 +1,390 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6921DC022459C8760021FD12 /* GatewaySDKFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = 6921DC002459C8760021FD12 /* GatewaySDKFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6921DC092459CE790021FD12 /* ZoopGatewayVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6921DC082459CE790021FD12 /* ZoopGatewayVC.swift */; };
+		6921DC0C2459CEFC0021FD12 /* ZoopConnectivityUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6921DC0B2459CEFC0021FD12 /* ZoopConnectivityUtils.swift */; };
+		6921DC0E2459CF030021FD12 /* ZoopConstantUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6921DC0D2459CF030021FD12 /* ZoopConstantUtils.swift */; };
+		6921DC102459CF0A0021FD12 /* ZoopLoadingUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6921DC0F2459CF0A0021FD12 /* ZoopLoadingUtils.swift */; };
+		6921DC132459CF1B0021FD12 /* ZoopDataObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6921DC122459CF1B0021FD12 /* ZoopDataObject.swift */; };
+		6921DC162459CF2C0021FD12 /* ZoopHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6921DC152459CF2C0021FD12 /* ZoopHandler.swift */; };
+		6921DC182459CF420021FD12 /* ZoopJsHandlerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6921DC172459CF420021FD12 /* ZoopJsHandlerType.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		6921DBFD2459C8760021FD12 /* GatewaySDKFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GatewaySDKFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6921DC002459C8760021FD12 /* GatewaySDKFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GatewaySDKFramework.h; sourceTree = "<group>"; };
+		6921DC012459C8760021FD12 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6921DC082459CE790021FD12 /* ZoopGatewayVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoopGatewayVC.swift; sourceTree = "<group>"; };
+		6921DC0B2459CEFC0021FD12 /* ZoopConnectivityUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoopConnectivityUtils.swift; sourceTree = "<group>"; };
+		6921DC0D2459CF030021FD12 /* ZoopConstantUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoopConstantUtils.swift; sourceTree = "<group>"; };
+		6921DC0F2459CF0A0021FD12 /* ZoopLoadingUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoopLoadingUtils.swift; sourceTree = "<group>"; };
+		6921DC122459CF1B0021FD12 /* ZoopDataObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoopDataObject.swift; sourceTree = "<group>"; };
+		6921DC152459CF2C0021FD12 /* ZoopHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoopHandler.swift; sourceTree = "<group>"; };
+		6921DC172459CF420021FD12 /* ZoopJsHandlerType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoopJsHandlerType.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6921DBFA2459C8760021FD12 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6921DBF32459C8760021FD12 = {
+			isa = PBXGroup;
+			children = (
+				6921DBFF2459C8760021FD12 /* GatewaySDKFramework */,
+				6921DBFE2459C8760021FD12 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6921DBFE2459C8760021FD12 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6921DBFD2459C8760021FD12 /* GatewaySDKFramework.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6921DBFF2459C8760021FD12 /* GatewaySDKFramework */ = {
+			isa = PBXGroup;
+			children = (
+				6921DC142459CF1E0021FD12 /* zoopHanndler */,
+				6921DC112459CF0F0021FD12 /* zoopModels */,
+				6921DC0A2459CED60021FD12 /* zoopUtils */,
+				6921DC082459CE790021FD12 /* ZoopGatewayVC.swift */,
+				6921DC002459C8760021FD12 /* GatewaySDKFramework.h */,
+				6921DC012459C8760021FD12 /* Info.plist */,
+			);
+			path = GatewaySDKFramework;
+			sourceTree = "<group>";
+		};
+		6921DC0A2459CED60021FD12 /* zoopUtils */ = {
+			isa = PBXGroup;
+			children = (
+				6921DC0F2459CF0A0021FD12 /* ZoopLoadingUtils.swift */,
+				6921DC0D2459CF030021FD12 /* ZoopConstantUtils.swift */,
+				6921DC0B2459CEFC0021FD12 /* ZoopConnectivityUtils.swift */,
+			);
+			path = zoopUtils;
+			sourceTree = "<group>";
+		};
+		6921DC112459CF0F0021FD12 /* zoopModels */ = {
+			isa = PBXGroup;
+			children = (
+				6921DC122459CF1B0021FD12 /* ZoopDataObject.swift */,
+			);
+			path = zoopModels;
+			sourceTree = "<group>";
+		};
+		6921DC142459CF1E0021FD12 /* zoopHanndler */ = {
+			isa = PBXGroup;
+			children = (
+				6921DC172459CF420021FD12 /* ZoopJsHandlerType.swift */,
+				6921DC152459CF2C0021FD12 /* ZoopHandler.swift */,
+			);
+			path = zoopHanndler;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		6921DBF82459C8760021FD12 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6921DC022459C8760021FD12 /* GatewaySDKFramework.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		6921DBFC2459C8760021FD12 /* GatewaySDKFramework */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6921DC052459C8760021FD12 /* Build configuration list for PBXNativeTarget "GatewaySDKFramework" */;
+			buildPhases = (
+				6921DBF82459C8760021FD12 /* Headers */,
+				6921DBF92459C8760021FD12 /* Sources */,
+				6921DBFA2459C8760021FD12 /* Frameworks */,
+				6921DBFB2459C8760021FD12 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GatewaySDKFramework;
+			productName = GatewaySDKFramework;
+			productReference = 6921DBFD2459C8760021FD12 /* GatewaySDKFramework.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6921DBF42459C8760021FD12 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1140;
+				ORGANIZATIONNAME = Divyank;
+				TargetAttributes = {
+					6921DBFC2459C8760021FD12 = {
+						CreatedOnToolsVersion = 11.4.1;
+						LastSwiftMigration = 1140;
+					};
+				};
+			};
+			buildConfigurationList = 6921DBF72459C8760021FD12 /* Build configuration list for PBXProject "GatewaySDKFramework" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6921DBF32459C8760021FD12;
+			productRefGroup = 6921DBFE2459C8760021FD12 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6921DBFC2459C8760021FD12 /* GatewaySDKFramework */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6921DBFB2459C8760021FD12 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6921DBF92459C8760021FD12 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6921DC182459CF420021FD12 /* ZoopJsHandlerType.swift in Sources */,
+				6921DC102459CF0A0021FD12 /* ZoopLoadingUtils.swift in Sources */,
+				6921DC0E2459CF030021FD12 /* ZoopConstantUtils.swift in Sources */,
+				6921DC132459CF1B0021FD12 /* ZoopDataObject.swift in Sources */,
+				6921DC0C2459CEFC0021FD12 /* ZoopConnectivityUtils.swift in Sources */,
+				6921DC162459CF2C0021FD12 /* ZoopHandler.swift in Sources */,
+				6921DC092459CE790021FD12 /* ZoopGatewayVC.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		6921DC032459C8760021FD12 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		6921DC042459C8760021FD12 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		6921DC062459C8760021FD12 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 8F2TF45787;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = GatewaySDKFramework/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = one.zoop.GatewaySDKFramework;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6921DC072459C8760021FD12 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 8F2TF45787;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = GatewaySDKFramework/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = one.zoop.GatewaySDKFramework;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6921DBF72459C8760021FD12 /* Build configuration list for PBXProject "GatewaySDKFramework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6921DC032459C8760021FD12 /* Debug */,
+				6921DC042459C8760021FD12 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6921DC052459C8760021FD12 /* Build configuration list for PBXNativeTarget "GatewaySDKFramework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6921DC062459C8760021FD12 /* Debug */,
+				6921DC072459C8760021FD12 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6921DBF42459C8760021FD12 /* Project object */;
+}
