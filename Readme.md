@@ -716,7 +716,7 @@ Also define constants inside your view controller as mentioned below
     var zoopResponse = "No Zoop Result Found"
     
 <a name="bsaCallSDK"></a> 
-#### 5.2 CALL ITR SDK FROM THE VIEW CONTROLLER
+#### 5.2 CALL BSA SDK FROM THE VIEW CONTROLLER
 
 1. Define one action button in your view controller from which you wan to open framework
 
@@ -728,7 +728,7 @@ Also define constants inside your view controller as mentioned below
             RequestParams.zoop_result_storyboard = "Main"
             RequestParams.zoop_result_storyboard_id = "ViewController"
             
-            RequestParams.zoop_req_type = ZOOP_REQ_ITR
+            RequestParams.zoop_req_type = ZOOP_REQ_BSA
             
             let s = UIStoryboard (name: "Main", bundle: nil)
             let qtVc = s.instantiateViewController(withIdentifier: "ZoopGatewayVC") as! ZoopGatewayVC
