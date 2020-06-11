@@ -1,4 +1,4 @@
-# zoop-gateway-android-sdk
+# zoop-gateway-ios-sdk
 AadhaarAPI | Zoop Android SDK for Income Tax Return and Bank Statement Analysis Gateway
 
 
