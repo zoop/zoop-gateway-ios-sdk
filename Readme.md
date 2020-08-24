@@ -61,9 +61,9 @@ AadhaarAPI | Zoop IOS SDK for Income Tax Return and Bank Statement Analysis Gate
    - [REQUEST BODY PARAMS](#esignRequestbody)
    - [RESPONSE PARAMS](#esignResponseParams)
 4. [ADDING SDK TO YOUR PROJECT](#esignAddSDK)
-5. [CONFIGURING AND LAUNCHING THE BSA FRAMEWORK](#esignConfigureSDK)
+5. [CONFIGURING AND LAUNCHING THE ESIGN FRAMEWORK](#esignConfigureSDK)
    - [IMPORT FILES](#esignImportFiles)
-   - [CALL BSA SDK FROM THE VIEW CONTROLLER](#esignCallSDK)
+   - [CALL ESIGN SDK FROM THE VIEW CONTROLLER](#esignCallSDK)
    - [HANDLE SDK RESPONSE](#esignHandleSDK)
 6. [RESPONSE FORMAT SENT ON MOBILE](#esignRespMobile)
    - [SUCCESS JSON RESPONSE FORMAT FOR E-SIGN SUCCESS](#esignSuccessRespMob)
@@ -1009,7 +1009,7 @@ Also define constants inside your view controller as mentioned below
     var zoopResponse = "No Zoop Result Found"
     
 <a name="esignCallSDK"></a> 
-#### 5.2 CALL ITR SDK FROM THE VIEW CONTROLLER
+#### 5.2 CALL ESIGN SDK FROM THE VIEW CONTROLLER
 
 1. Define one action button in your view controller from which you wan to open framework
 
