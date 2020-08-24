@@ -55,6 +55,7 @@ AadhaarAPI | Zoop IOS SDK for Income Tax Return and Bank Statement Analysis Gate
 ## Zoop.one E-Sign Gateway (V2 BETA).
 1. [INTRODUCTION](#esignIntroduction)
 2. [PROCESS FLOW](#esignProcessFlow)
+   - [END USER FLOW](#esignEndUserFlow)
 3. [INITIATING A GATEWAY TRANSACTION FOR E-SIGN](#esignInit)
    - [INIT URL](#esignInitUrl)
    - [REQUEST HEADERS](#esignRequestHeaders)
@@ -908,8 +909,8 @@ accepted widely across India by various organisations.
 5. Once the transaction is successful or failed, appropriate handler function will be called with response JSON, that can be used by the client to process the flow further. 
 6. Client will also have a REST API available to pull the status of a gateway transaction from backend.
 
-#### 2.1 END USER FLOW
 <a name="esignEndUserFlow"></a>
+#### 2.1 END USER FLOW
 1. Customer Login [ Phone + OTP ]
 2. Document displayed to customer. (Draggable signature option can be turned on via gateway config or
    signPageNumber and coordinates can be fixed during initiation call)
