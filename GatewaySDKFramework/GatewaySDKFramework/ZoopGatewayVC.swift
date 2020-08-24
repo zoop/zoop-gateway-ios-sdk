@@ -72,6 +72,11 @@ public class ZoopGatewayVC: UIViewController, WKUIDelegate, WKNavigationDelegate
             jsContentController.add(self, name: ZoopJsHandlerType.OTP_ERROR.rawValue)
             jsContentController.add(self, name: ZoopJsHandlerType.WV_TERMINATION.rawValue)
             jsContentController.add(self, name: ZoopJsHandlerType.DENY_CONSENT.rawValue)
+            jsContentController.add(self, name: ZoopJsHandlerType.ESIGN_ERROR.rawValue)
+            jsContentController.add(self, name: ZoopJsHandlerType.ESIGN_SUCCESS.rawValue)
+            jsContentController.add(self, name: ZoopJsHandlerType.REQUEST_XML.rawValue)
+            jsContentController.add(self, name: ZoopJsHandlerType.FILE_DOWNLOAD.rawValue)
+
             zoopWebView = WKWebView( frame: view.bounds, configuration: qtConfig)
         }
         
@@ -90,7 +95,11 @@ public class ZoopGatewayVC: UIViewController, WKUIDelegate, WKNavigationDelegate
                        let reqUrl = qtReqUrl.generateBsaURL(ReqObject: zoopReqObject)
                         //  print(reqUrl)
                           urlCheck(reqUrl: reqUrl)
-                      }
+                      } else if zoopReqObject.zoop_req_type == ZOOP_REQ_ESIGN{
+                       let reqUrl = qtReqUrl.generateEsignV2Url(ReqObject: zoopReqObject)
+                         urlCheck(reqUrl: reqUrl)
+                    }
+                    
                   }else{
                       print(zoopLogTag, zoopLogTypeE, "No Internet Connection")
                       self.zoopDisplayErr(qtErrTitle: "No Internet Connection", qtErrString: "Please, Turn on cellular data or wifi to proceed further")
@@ -177,22 +186,95 @@ public class ZoopGatewayVC: UIViewController, WKUIDelegate, WKNavigationDelegate
                 }else if zoopHandlerType == ZoopJsHandlerType.WV_ERROR.rawValue {
                     print(message.name)
                     zoopResInfo.zoop_response = message.body as! String
+                    zoopResInfo.zoop_result_type = ZOOP_RESULT_ERR
                     dispResult(zoopSbInfo: zoopReqObject, zoopResultInfo: zoopResInfo)
                     
                 }else if zoopHandlerType == ZoopJsHandlerType.OTP_ERROR.rawValue {
                     print(message.name)
                     zoopResInfo.zoop_response = message.body as! String
+                    zoopResInfo.zoop_result_type = message.name
+
                     dispResult(zoopSbInfo: zoopReqObject, zoopResultInfo: zoopResInfo)
                     
                 }else if zoopHandlerType == ZoopJsHandlerType.WV_TERMINATION.rawValue {
                     print(message.name)
                     zoopResInfo.zoop_response = message.body as! String
+                    zoopResInfo.zoop_result_type = ZOOP_RESULT_ERR
                     dispResult(zoopSbInfo: zoopReqObject, zoopResultInfo: zoopResInfo)
                     
                 }else if zoopHandlerType == ZoopJsHandlerType.DENY_CONSENT.rawValue {
                     print(message.name)
                     zoopResInfo.zoop_response = message.body as! String
+                    zoopResInfo.zoop_result_type = ZOOP_RESULT_ERR
                     dispResult(zoopSbInfo: zoopReqObject, zoopResultInfo: zoopResInfo)
+                    
+                } else if zoopHandlerType == ZoopJsHandlerType.ESIGN_SUCCESS.rawValue {
+                    print(message.name)
+                    zoopResInfo.zoop_response = message.body as! String
+                    zoopResInfo.zoop_result_type = ZOOP_RESULT_OK
+                    dispResult(zoopSbInfo: zoopReqObject, zoopResultInfo: zoopResInfo)
+                    
+                } else if zoopHandlerType == ZoopJsHandlerType.ESIGN_ERROR.rawValue {
+                    print(message.name)
+                    zoopResInfo.zoop_response = message.body as! String
+                    zoopResInfo.zoop_result_type = ZOOP_RESULT_ERR
+                    dispResult(zoopSbInfo: zoopReqObject, zoopResultInfo: zoopResInfo)
+                    
+                } else if zoopHandlerType == ZoopJsHandlerType.REQUEST_XML.rawValue {
+                    print(message.name)
+                    zoopResInfo.zoop_response = message.body as! String
+//                    dispResult(zoopSbInfo: zoopReqObject, zoopResultInfo: zoopResInfo)
+                    
+                } else if zoopHandlerType == ZoopJsHandlerType.FILE_DOWNLOAD.rawValue {
+                    print(message.name)
+                    zoopResInfo.zoop_response = message.body as! String
+                let res : String = message.body as! String
+                print(res);
+                let data = Data(res.utf8)
+                do {
+                    if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                        // try to read out a string array
+                        let dynamic = json["dynamic_url"] as! String
+                         let id = json["id"] as! String
+                      
+                        
+                        // Create destination URL
+                        let documentsUrl:URL =  (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first as URL?)!
+                        
+                           let destinationFileUrl = documentsUrl.appendingPathComponent("\(id).pdf")
+                        
+                           
+                           //Create URL to the source file you want to download
+                           let fileURL = URL(string: dynamic)
+                           print("file-- \(fileURL!)")
+                           let request = URLRequest(url: fileURL!)
+                           let sessionConfig = URLSessionConfiguration.default
+                           let session = URLSession(configuration: sessionConfig)
+
+                           let task = session.downloadTask(with: request) { (tempLocalUrl, response, error) in
+                               if let tempLocalUrl = tempLocalUrl, error == nil {
+                                   // Success
+                                   if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                                       print("Successfully downloaded. Status code: \(statusCode)")
+                                   }
+
+                                   do {
+                                       try FileManager.default.copyItem(at: tempLocalUrl, to: destinationFileUrl)
+                                   } catch (let writeError) {
+                                       print("Error creating a file \(destinationFileUrl) : \(writeError)")
+                                   }
+
+                               } else {
+                                   print("Error took place while downloading a file. Error description: %@", error?.localizedDescription);
+                               }
+                           }
+                           task.resume()
+                    
+                    }
+                } catch let error as NSError {
+                    print(error)
+                }
+//                    dispResult(zoopSbInfo: zoopReqObject, zoopResultInfo: zoopResInfo)
                     
                 }
             }
