@@ -91,7 +91,7 @@ class ZoopHandler{
             let qtUrl = URL(string: qtUrlString)
             return qtUrl!
         }
-        zoopComponents.path = "/esign/gateway/v2/" + ReqObject.zoop_gateway_id
+        zoopComponents.path = "/esign/gateway/v3/" + ReqObject.zoop_gateway_id
         let sdkVersion = URLQueryItem(name: "m_sdk_version", value: "1.0.2")
         let zoopPlatform = URLQueryItem(name: "platform", value: "ios")
         let otpMode = URLQueryItem(name: "otp_mode", value: ReqObject.zoop_otp_mode)
