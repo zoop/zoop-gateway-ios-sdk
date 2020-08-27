@@ -16,7 +16,12 @@ public struct ZoopDataObject {
        public var zoop_color_bg : String = "2c3e50"
        public var zoop_color_ft : String = "ffffff"
        public var zoop_req_type : String = ""
-
+       public var zoop_phone_auth_access : String = "y"
+       public var zoop_draggable : String = "n"
+       public var zoop_otp_mode = "y"
+       public var zoop_fp_mode = "n"
+       public var zoop_iris_mode = "n"
+       public var zoop_phone_number = "";
     //   public var qt_req_type : String = QT_REQ_CREDITSCORE
     //   public var qt_req_type : String = QT_REQ_OFFLINEAADHAAR
        

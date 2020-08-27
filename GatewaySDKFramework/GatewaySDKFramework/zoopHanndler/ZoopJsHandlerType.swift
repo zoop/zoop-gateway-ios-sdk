@@ -18,4 +18,11 @@ public enum ZoopJsHandlerType: String {
     case DENY_CONSENT = "handleConsentDenied"
     case WV_ERROR = "handleGatewayError"
     case WV_TERMINATION = "handleGatewayTermination"
+     
+    case ESIGN_ERROR = "handleEsignError";
+    case ESIGN_SUCCESS = "handleEsignSuccess"
+    case REQUEST_XML = "getRequestXml"
+    case FILE_DOWNLOAD = "handleFileDownload"
+    
+    
 }
