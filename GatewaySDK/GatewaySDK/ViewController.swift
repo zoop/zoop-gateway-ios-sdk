@@ -50,12 +50,12 @@ class ViewController: UIViewController {
             
             var RequestParams  = ZoopDataObject()
             RequestParams.zoop_env = "QT_PP"
-            RequestParams.zoop_gateway_id = "14a9ba38-4290-486f-8724-e4e2ee7c1cb6"
+            RequestParams.zoop_gateway_id = "5f86c1b22b0f3b0012b770d5"
             
             RequestParams.zoop_result_storyboard = "Main"
             RequestParams.zoop_result_storyboard_id = "ViewController"
             
-            RequestParams.zoop_req_type = ZOOP_REQ_ESIGN
+            RequestParams.zoop_req_type = ZOOP_REQ_ITR
             
 //            if RequestParams.qt_req_type == QT_REQ_OFFLINEAADHAAR {
 //                RequestParams.qt_validate_phone = "y"

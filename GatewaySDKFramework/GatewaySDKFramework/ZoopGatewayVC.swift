@@ -83,7 +83,7 @@ public class ZoopGatewayVC: UIViewController, WKUIDelegate, WKNavigationDelegate
         func zoopInitParamCheck() {
               print(zoopReqObject.zoop_req_type)
               
-              if zoopReqObject.zoop_gateway_id.count == 36 {
+              if zoopReqObject.zoop_gateway_id.count <= 36 {
                   if ZoopConnectivityUtils.isConnectedToNetwork(){
                       let qtReqUrl = ZoopHandler()
                      
