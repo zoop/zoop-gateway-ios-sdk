@@ -4,7 +4,7 @@ AadhaarAPI | Zoop IOS SDK for Income Tax Return and Bank Statement Analysis Gate
 
 # Table of Contents
 
-## Zoop.one Income Tax Return(ITR) Gateway     
+## Zoop.one Income Tax Department(ITR) Gateway (Beta)  
 1. [INTRODUCTION](#itrIntroduction)
 2. [PROCESS FLOW](#itrProcessFlow)
 3. [INITIATING A GATEWAY TRANSACTION](#itrInit)
@@ -12,18 +12,24 @@ AadhaarAPI | Zoop IOS SDK for Income Tax Return and Bank Statement Analysis Gate
    - [REQUEST HEADERS](#itrRequestHeader)
    - [REQUEST BODY PARAMS](#itrRequestBody)
    - [RESPONSE PARAMS](#itrRespParam)
-4. [ADDING FRAMEWORK TO YOUR PROJECT](#itrAddSDK)
-5. [CONFIGURING AND LAUNCHING THE ITR SDK](#itrConfigureSDK)
+4. [FETCH URL](#itrFetchUrl)   
+   - [FETCH RESPONSE](#itrFetchResponse)
+5. [ADDING FRAMEWORK TO YOUR PROJECT](#itrAddSDK)
+6. [CONFIGURING AND LAUNCHING THE ITR SDK](#itrConfigureSDK)
    - [IMPORT FILES](#itrImportFiles)
    - [CALL ITR FAMEWORK FROM THE VIEW CONTROLLER](#itrCallSDK)
    - [HANDLE SDK RESPONSE](#itrHandleSDK)
-6. [RESPONSE FORMAT SENT ON MOBILE](#itrRespMobile)
+7. [RESPONSE FORMAT SENT ON MOBILE](#itrRespMobile)
    - [SUCCESS JSON RESPONSE FORMAT FOR ITR SUCCESS](#itrRespSuccessMobile)
    - [ERROR JSON RESPONSE FORMAT FOR ITR ERROR](#itrRespErrorMobile)
-7. [Handling Webhook Response](#itrWebhook)
+   - [EVENT- ITD CONSENT DENIED](#itrRespErrorConsentDenied)
+   - [[EVENT- ITD GATEWAY TERMINATED](#itrRespErrorGatewayTerminated)
+8. [Handling Webhook Response](#itrWebhook)
    - [SUCCESSFUL REQUEST BODY](#itrSuccessWebhookReqBody)
    - [FAILURE REQUEST BODY](#itrErrorWebhookReqBody)
-   - [RESPONSE CODES AND MESSAGES](#itrErrorCodeWebhook)
+   - [26AS SUCCESSFUL REQUEST BODY](#26asSuccessWebhookReqBody)
+   - [WEBHOOK EVENT TYPES](#itrWebhookEventTypes)
+   - [REASON AND RESPONSE CODES AND MESSAGES](#itrErrorCodeWebhook)
 
 ## Zoop.one Bank Statement Analysis(BSA) Gateway   
 1. [INTRODUCTION](#bsaIntro)
@@ -76,15 +82,17 @@ AadhaarAPI | Zoop IOS SDK for Income Tax Return and Bank Statement Analysis Gate
 8. [BIOMETRIC DEVICES SETUP](#esignBiometric)
 9. [PULLING TRANSACTION STATUS AT BACKEND](#esignStatus)
    - [RESPONSE PARAMS](#esignStatusResp)
-## Zoop.one Income Tax Return(ITR) Gateway
+   
+## Zoop.one Income Tax Department(ITR) Gateway (Beta)
 
 <a name="itrIntroduction"></a>
 ### 1. INTRODUCTION
-**Income Tax Return** is the form in which assessee files information about his Income and tax thereon to Income Tax Department. The Zoop ITR Gateway allows allows you to fetch the tax returns of your client and make better business decision on them.
+**Income Tax Department** holds and verifies the earnings and tax related information of an individual.
+Income tax return is a form where a person submits information about his income earned and the tax paid to the Department. Whereas 26AS is a consolidated annual tax credit statement of an individual's earnings as per the ITD records. The Zoop ITD Gateway allows you to fetch and verify the financial information of your client in order to make better business decisions.
 
 <a name="itrProcessFlow"></a>
 ### 2. PROCESS FLOW
-1. At your backend server, Initiate the **ITR** transaction using a simple Rest API [POST] call. Details of these are available in the documents later. You will require API key and Agency Id for accessing this API which can be generated from the Dashboard.
+1. At your backend server, Initiate the **ITD** transaction using a simple Rest API [POST] call. Details of these are available in the documents later. You will require API key and Agency Id for accessing this API which can be generated from the Dashboard.
 2. This gateway transaction id then needs to be communicated back to the frontend(in Android Project) where SDK is to be called.
 3. After adding the Framework in your ios project, client has to pass the above generated transaction id to a Framework View Controller, which will open the Framework.
 4. Framework will open with a user login after which and the rest of the process till response will be handled by the gateway itself.
@@ -99,7 +107,7 @@ To initiate a gateway transaction a REST API call has to be made to backend. Thi
 <a name="itrInitUrl"></a>
 #### 3.1 INIT URL: 
 
-    URL: POST: {{base_url}}/itr/v1/init
+    URL: POST: {{base_url}}/itd/v2/init
 
  **{{base_url}}**:
  
@@ -107,7 +115,7 @@ To initiate a gateway transaction a REST API call has to be made to backend. Thi
  
  **For Production Environment:** https://prod.aadhaarapi.com
  
- **Example Url:** https://preprod.aadhaarapi.com/itr/v1/init
+ **Example Url:** https://preprod.aadhaarapi.com/itd/v2/init
  
 <a name="itrRequestHeader"></a> 
 #### 3.2 REQUEST HEADERS: [All Mandatory]
@@ -120,31 +128,47 @@ To initiate a gateway transaction a REST API call has to be made to backend. Thi
   
 <a name="itrRequestBody"></a> 
 #### 3.3 REQUEST BODY PARAMS:
-
-      {
-        "mode": "POPUP",
-        "redirect_url": "https://google.com",
-        "webhook_url": "https://webhook.site/7772560d-c97d-43cc-bf8e-248dc41946e1",
-        "purpose": "load agreement",
-        "phone": "<<PHONE>>",
-        "pan": "<<PAN_NUMBER>>",
-        "dob": "<<DOB>>",
-        "pdf_required": "Y",
-        "duration": 3
-      }
+ 
+```json
+{
+  "mode": "POPUP",
+  "webhook_url": "https://your-website.com/webhook",
+  "redirect_url": "https://your-website.com",
+  "purpose": "testing",
+  "phone": "9999999999",
+  "dob": "01-01-1990",
+  "phone_override": false,
+  "document_required": {
+    "ITR": 1,
+    "26AS": 2
+  },
+  "pan": "ABCDE1234F",
+  "pdf_required": false
+}
+```
       
-| Parameters   | Mandatory | Description/Value                                    |
-| ------------ | --------- | ---------------------------------------------------- |
-| mode         | true      | REDIRECT or POPUP                                    |
-| redirect_url | false     | A valid URL                                          |
-| webhook_url  | true      | A valid URL                                          |
-| purpose      | true      | Your purpose                                         |
-| phone        | true      | Phone number linked to ITR portal                    |
-| pan          | true      | PAN number linked to ITR portal                      |
-| dob          | true      | Date of birth of the PAN holder in YYYY-MM-DD format |
-| pdf_required | false     | Whether you need PDF of ITR fetched                  |
-| duration     | false     | Years for which ITR details to fetch                 |
+| Parameters          | Mandatory | Description/Value                                      |
+| ------------------- | --------- | ------------------------------------------------------ |
+| mode                | true      | REDIRECT or POPUP                                      |
+| redirect_url        | false     | A valid URL                                            |
+| webhook_url         | true      | A valid URL                                            |
+| purpose             | true      | The reason for the transaction                         |
+| phone_override      | false     | If you wanted to update your phone number              |
+| document_required { | true      | If you wanted to update your phone number              |
+| ITR                 | false     | Specify for how many years of ITR you wanted to fetch  |
+| 26AS }              | false     | Specify for how many years of 26AS you wanted to fetch |
+| phone               | true      | Phone number you wanted to use at our platform         |
+| pan                 | true      | PAN number linked to ITR portal                        |
+| dob                 | true      | Date of birth of the PAN holder in MM-DD-YYYY format   |
+| pdf_required        | false     | Whether you need PDF of ITR fetched                    |
 
+**NOTE**: If an existing user submits invalid combination of Phone registered against PAN and DOB. We will return an error that _PAN is already linked with a different phone number **\*\***1234_ with last 4 digits of correct phone number.
+In such scenario if the user doesn't have the phone number then they need to login into Income Tax Department (ITD) Portal using their ID password and remove us as e-Return Intermediary using this process.
+After that you need to provided `phone_override` as `true` to evade the error.
+
+**New User** - New unique user being added to the ITD Portal for ITR and/or 26AS verification for the first time via ZOOP.ONE
+
+**Existing User** - User that was added to ITD by ZOOP.ONE to verify and fetch ITR and/or 26AS details, has been requested for re-verification of documents for the user on the same credentials as stored in ZOOP.ONE system earlier.
 
 <a name="itrRespParam"></a>
 #### 3.4 RESPONSE PARAMS:
@@ -154,11 +178,11 @@ To initiate a gateway transaction a REST API call has to be made to backend. Thi
 {
   "id": "<<transaction_id>>",
   "mode": "POPUP",
-  "env": "PRODUCTION",
-  "webhook_security_key": "<<UUID>>",
-  "request_version": "1.0",
-  "request_timestamp": "2020-02-17T13:14:26.423Z",
-  "expires_at": "2020-02-17T13:24:26.423Z"
+  "env": "production",
+  "request_version": "2.0",
+  "webhook_security_key": "<<security_key>>",
+  "request_timestamp": "2020-10-13T09:34:02.204Z",
+  "expires_at": "2020-10-13T09:44:02.194Z"
 }
 ```
 
@@ -170,13 +194,89 @@ The above generated gateway transactionId is needed to make open gateway via And
 
 ```json
 {
-  "statusCode": 400,
-  "errors": [],
-  "message": "<<message about the error>>"
+  "error": {
+    "reason_message": "<<ERROR MESSAGE>>,
+    "reason_code": "<<ERROR_CODE>>"
+  }
+}
+```
+
+##### 3.4.3 Reason code and reason message list
+
+Here are the list of reason code and message that you might receive if there is an error while making the init call.
+
+| Reason Code                      | Reason Message                                                       |
+| -------------------------------- | -------------------------------------------------------------------- |
+| MISSING_MODE                     | Mode is required                                                     |
+| INVALID_MODE                     | Mode should either be POPUP or REDIRECT                              |
+| MISSING_REDIRECT_URL             | Redirect URL is required when mode is REDIRECT                       |
+| INVALID_REDIRECT_URL             | Redirect URL is invalid                                              |
+| MISSING_PAN                      | PAN number is required                                               |
+| INVALID_PAN                      | PAN is invalid                                                       |
+| MISSING_PHONE_NUMBER             | Phone number is required                                             |
+| INVALID_PHONE_NUMBER             | Phone number is invalid                                              |
+| MISSING_DATE_OF_BIRTH            | Date of birth is required                                            |
+| INVALID_DATE_OF_BIRTH            | Date of birth is invalid                                             |
+| MISSING_WEBHOOK_URL              | Webhook URL is required                                              |
+| INVALID_WEBHOOK_URL              | Webhook URL is invalid                                               |
+| MISSING_PURPOSE                  | Purpose is required                                                  |
+| INVALID_PURPOSE                  | Purpose should be with 1000 characters                               |
+| INVALID_PHONE_OVERRIDE           | Phone override should be boolean                                     |
+| INVALID_PDF_REQUIRED             | PDF required should be boolean                                       |
+| INVALID_ITR_DOCUMENT_REQUIRED    | ITR duration should be between 1 to 3 years                          |
+| MAX_DURATION_REACHED_ITR         | ITR should be maximum of 3 years                                     |
+| MAX_DURATION_REACHED_26AS        | 26AS should be maximum of 2 years                                    |
+| INVALID_26AS_DOCUMENT_REQUIRED   | 26AS duration should be between 1 to 2 years                         |
+| MISSING_DOCUMENT_REQUIRED        | Required document should either be ITR or 26AS or both               |
+| PAN_LINKED_WITH_DIFFERENT_NUMBER | PAN is already linked with a different phone number **\*\***0797     |
+| DATE_OF_BIRTH_MISMATCH           | Provided date of birth (1995-05-19) did not match with existing data |
+| SOMETHING_WENT_WRONG             | Something went wrong                                                 |
+
+<a name="itrFetchUrl"></a>
+#### 4 FETCH URL:
+
+After generating the transaction id, at any point in time to get the details about the transaction state you can use this API.
+
+    URL: GET: {{base_url}}/itd/v2/fetch/<<transaction_id>>
+    
+<a name="itrFetchResponse"></a>
+#### 4.1 FETCH RESPONSE:
+
+After successful response you will receive the following JSON
+
+```json
+{
+  "org": {
+    "id": "<<your org id>>",
+    "name": "<<your org name>>"
+  },
+  "last_user_stage_code": "TXN_INITIALIZED",
+  "itr_requested": true,
+  "26as_requested": true,
+  "request_version": "2.0",
+  "phone_override": false,
+  "otp_resend_count": 0,
+  "otp_verify_count": 0,
+  "mode": "POPUP",
+  "pan": "ABCDE1234F",
+  "consent_text": "By clicking \"Submit\" you allow ZOOP.ONE to fetch ITR and 26AS and submit to YOUR COMPANY for testing",
+  "env": "production",
+  "webhook_security_key": "<<some secure key>>",
+  "26as_duration": 2,
+  "itr_duration": 1,
+  "webhook_url": "https://your-website.com/webhook",
+  "redirect_url": "https://your-website.com",
+  "pdf_required": false,
+  "id": "<<transaction_id>>",
+  "itr_response_sent": false,
+  "phone": "9999999999",
+  "dob": "01-01-1990",
+  "26as_response_sent": false,
+  "request_timestamp": "2020-10-12T11:26:07.398Z"
 }
 ```
 <a name="itrAddSDK"></a>
-### 4.ADDING FRAMEWORK TO YOUR PROJECT
+### 5.ADDING FRAMEWORK TO YOUR PROJECT
 
 1. Drag and Drop GatewaySdkFramework to your Xcode project root file
 
@@ -191,10 +291,10 @@ The above generated gateway transactionId is needed to make open gateway via And
 ![Alt text](https://static-aadhaarapi.s3.ap-south-1.amazonaws.com/screens/Screenshot+2020-05-01+at+2.06.52+PM.png "Optional title")
 
 <a name="itrConfigureSDK"></a>
-### 5. CONFIGURING AND LAUNCHING THE ITR SDK 
+### 6. CONFIGURING AND LAUNCHING THE ITR SDK 
 
 <a name="itrImportFiles"></a>
-#### 5.1 IMPORT FILES
+#### 6.1 IMPORT FILES
 
     import UIKit
     import GatewaySDKFramework
@@ -205,14 +305,14 @@ Also define constants inside your view controller as mentioned below
     var zoopResponse = "No Zoop Result Found"
     
 <a name="itrCallSDK"></a> 
-#### 5.2 CALL ITR SDK FROM THE VIEW CONTROLLER
+#### 6.2 CALL ITR SDK FROM THE VIEW CONTROLLER
 
 1. Define one action button in your view controller from which you wan to open framework
 
         @IBAction func btnCallSDK(_ sender: Any) {
             
             var RequestParams  = ZoopDataObject()
-            RequestParams.zoop_gateway_id = "b9180f6b-9100-4a68-9867-ea4a230a1b00"
+            RequestParams.zoop_gateway_id = "5f86c1b22b0f3b0012b770d5"
             
             RequestParams.zoop_result_storyboard = "Main"
             RequestParams.zoop_result_storyboard_id = "ViewController"
@@ -238,7 +338,7 @@ zoop_gateway_id: “Transaction Id generated from your backend must be passed he
 
 
 <a name="itrHandleSDK"></a> 
-#### 5.3 HANDLE SDK RESPONSE
+#### 6.3 HANDLE SDK RESPONSE
 
 After performing a Successful Transaction: ITR of user will be downloaded 
 
@@ -276,270 +376,461 @@ Also the responses incase of successful transaction as well as response in case 
         
  
  <a name="itrRespMobile"></a>
-### 6. RESPONSE FORMAT SENT ON MOBILE
+### 7. RESPONSE FORMAT SENT ON MOBILE
+
 <a name="itrRespSuccessMobile"></a>
-#### 6.1 SUCCESS JSON RESPONSE FORMAT FOR ITR SUCCESS 
+#### 7.1 SUCCESS JSON RESPONSE FORMAT FOR ITR SUCCESS 
 
 ```json
 {
   "id":"10543aba-e09f-4ee0-9452-ee62584fdb2e",
   "response_message":"Transaction Successful",
-  "response_code":"101"
+  "response_code":"TRANSACTION_SUCCESSFUL"
 }
 ```
 <a name="itrRespErrorMobile"></a>    
-#### 6.2 ERROR JSON RESPONSE FORMAT FOR ITR ERROR
+#### 7.2 ERROR JSON RESPONSE FORMAT FOR ITR ERROR
 
 ```json
    {   
-      "id":"10543aba-e09f-4ee0-9452-ee62584fdb2e",
-      "response_message":"Session expired or invalid session",
-      "response_code":"606"
+     "id": "<<transaction_id>>",
+    "error": {
+      "reason_code": "ITD_PAN_ALREADY_ADDED",
+      "reason_message": "PAN Number already added with Income Tax Department",
+      "response_code": "106",
+      "response_message": "Invalid combination of inputs"
+      }
     }
 ```
 
-|Response Parameter| Description/Possible Values|
-|----|----|
-|response_code| if transaction is successful then value is '101' otherwise there should be an error code|
-|response_message| if transaction is successful then value is 'Transaction Successful' otherwise there should be an error message|
-|id| Transaction id |
+These are the values that you may receive in case there is an error while processing the transaction. Please note that for some errors you might not receive `response_code` and `response_message` that's why they are `undefined`.
 
+| reason_code             | reason_message                                                     | response_code | response_message              |
+| ----------------------- | ------------------------------------------------------------------ | ------------- | ----------------------------- |
+| INTERNAL_ERROR          | Something went wrong                                               | 111           | Internal Error                |
+| TXN_EXPIRED             | Transaction expired                                                | `undefined`   | `undefined`                   |
+| TXN_COMPLETED           | Transaction Successfully Completed                                 | `undefined`   | `undefined`                   |
+| TXN_IN_QUEUE            | Transaction is already in progress                                 | `undefined`   | `undefined`                   |
+| TXN_OTP_LIMIT_EXHAUSTED | Transaction is already finished with error                         | `undefined`   | `undefined`                   |
+| TXN_NOT_FOUND           | Transaction not found                                              | `undefined`   | `undefined`                   |
+| ITD_PAN_ALREADY_ADDED   | PAN Number already added with Income Tax Department                | 106           | Invalid combination of inputs |
+| ITD_PAN_NOT_EXIST       | Unable to fetch the PAN Number entered from the Income Tax records | 101           | No Records Found              |
+| ITD_DOB_MISSING         | Date of birth missing                                              | 106           | Invalid combination of inputs |
+| ITD_INVALID_DOB_PATTERN | Invalid date of birth pattern                                      | 106           | Invalid combination of inputs |
+| ITD_INVALID_DOB         | Date of birth invalid                                              | 106           | Invalid combination of inputs |
+| ITD_INVALID_PAN_FORMAT  | PAN format invalid                                                 | 106           | Invalid combination of inputs |
+| ITD_PAN_NOT_REGISTERED  | Unable to fetch the PAN Number entered from the Income Tax records | 101           | No Records Found              |
+| ITD_MOBILE_OTP_EMPTY    | Mobile OTP required                                                | 106           | Invalid combination of inputs |
+| ITD_EMAIL_OTP_EMPTY     | Email OTP required                                                 | 106           | Invalid combination of inputs |
+| ITD_INVALID_MOBILE_OTP  | Mobile OTP is invalid                                              | 106           | Invalid combination of inputs |
+| ITD_INVALID_EMAIL_OTP   | Email OTP is invalid                                               | 106           | Invalid combination of inputs |
+| ITD_INCORRECT_OTP       | Email and Mobile OTP invalid                                       | 106           | Invalid combination of inputs |
 
-| response_code | response_message           |
-| ------------- | -------------------------- |
-| 601           | Unknown Error              |
-| 602           | Unable to download ITR     |
-| 603           | Unable to process response |
-| 604           | Unable to submit the OTP   |
-| 605           | Unable to parse ITR        |
-| 606           | Session expired or invalid |
-| 611           | Service unavailable        |
+<a name="itrRespErrorConsentDenied"></a> 
+#### 7.3 Event: `itd-consent-denied`
 
+This event is fired when user don't want to agree going ahead with the transaction and explicitly _Deny_ the transaction in the gateway. The respective callback is called and `message` parameter is passed. The `message` is an object with `action` and `payload` property on it.
+
+The `payload` has `id`, `response_code`, and `response_message` properties.
+
+| response_code  | response_message |
+| -------------- | ---------------- |
+| CONSENT_DENIED | Consent Denied   |
+
+```json
+{
+    "id": "<<transaction_id>>",
+    "response_code": "CONSENT_DENIED",
+    "response_message": "Consent Denied"
+}
+```
+<a name="itrRespErrorGatewayTerminated"></a> 
+#### 7.4 Event: `itd-gateway-terminated`
+
+This event is fired when user explicitly closed the an ongoing transaction. The respective callback is called and `message` parameter is passed. The `message` is an object with `action` and `payload` property on it.
+
+The `payload` has `id`, `response_code`, and `response_message` properties.
+
+| response_code      | response_message   |
+| ------------------ | ------------------ |
+| GATEWAY_TERMINATED | Gateway Terminated |
+
+```json
+{
+    "id": "<<transaction_id>>",
+    "response_code": "GATEWAY_TERMINATED",
+    "response_message": "Gateway Terminated"
+}
+```
 <a name="itrWebhook"></a>
-### 7. Handling Webhook Response
+### 8. Handling Webhook Response
 
 The webhook response will be sent to `webhook_url` provided at the init call. When receiving the webhook response please match the `webhook_security_key` in the header of the request to be the same as the one provided in the init call. If they are not the same **you must abandon the webhook response**.
 
 <a name="itrSuccessWebhookReqBody"></a>
-#### 7.1 SUCCESSFUL REQUEST BODY
+#### 8.1 SUCCESSFUL REQUEST BODY
 
 ```json
 {
   "id": "<<transaction_id>>",
-  "mode": "POPUP",
-  "env": "PRODUCTION",
-  "response_code": "101",
-  "response_message": "Transaction Successful",
-  "phone_number": "<<PHONE>>",
-  "dob": "<<DOB>>",
-  "request_version": "1.0",
-  "pan": "<<PAN_NUMBER>>",
-  "request_medium": "<<web | android | ios>>",
-  "sdk_name": "1",
-  "data": {
-    "transactions": [
-      {
-        "2019-20": {
-          "PersonalInfo": {
-            "Address": {
-              "PinCode": "453009",
-              "ResidenceNo": "Vikasnagar  West Part R.No.3",
-              "CityOrTownOrDistrict": "Indore",
-              "State": "Madhya pradesh",
-              "MobileNo": "8765476856",
-              "EmailAddress": "abc@gmail.com",
-              "LocalityOrArea": "Tehri Garhwal"
-            },
-            "AadhaarCardNo": "1123457684302546",
-            "PAN": "BFZPT11897",
-            "DOB": "04/04/1982",
-            "Name": "Rahul  Gupta",
-            "EmployerCategory": "Not Applicable"
-          },
-          "ITR1_IncomeDeductions": {
-            "ProfitsInSalary": "0",
-            "Salary": "10000",
-            "AlwnsNotExempt": "0",
-            "IncomeFromSal": "10000",
-            "DeductionUs16": "10000",
-            "UsrDeductUndChapVIA": {
-              "Section80DD": "0",
-              "TotalChapVIADeductions": "0",
-              "Section80GGA": "0",
-              "Section80DDB": "0",
-              "Section80CCG": "0",
-              "Section80GG": "0",
-              "Section80CCDEmployer": "0",
-              "Section80CCD1B": "0",
-              "Section80GGC": "0",
-              "Section80TTA": "0",
-              "Section80DHealthInsPremium": {
-                "Sec80DHealthInsurancePremiumUsr": "0",
-                "Sec80DMedicalExpenditureUsr": "0",
-                "Sec80DPreventiveHealthCheckUpUsr": "0"
-              },
-              "Section80CCDEmployeeOrSE": "0",
-              "Section80E": "0",
-              "Section80C": "0",
-              "Section80CCC": "0",
-              "Section80EE": "0",
-              "Section80U": "0"
-            },
-            "IncomeOthSrc": "0",
-            "GrossTotIncome": "0",
-            "TotalIncomeOfHP": "0",
-            "TotalIncome": "0",
-            "PerquisitesValue": "0"
-          },
-          "ITR1_TaxComputation": {
-            "TotalIntrstPay": "0",
-            "Section89": "0",
-            "NetTaxLiability": "0",
-            "Rebate87A": "0",
-            "GrossTaxLiability": "0",
-            "TotalTaxPayable": "0",
-            "TotTaxPlusIntrstPay": "0",
-            "TaxPayableOnRebate": "0",
-            "EducationCess": "0",
-            "IntrstPay": {
-              "IntrstPayUs234A": "0",
-              "IntrstPayUs234B": "0",
-              "IntrstPayUs234C": "0"
-            }
-          },
-          "TaxPaid": {
-            "TaxesPaid": {
-              "AdvanceTax": "0",
-              "SelfAssessmentTax": "0",
-              "TDS": "0",
-              "TCS": "0",
-              "TotalTaxesPaid": "0"
-            },
-            "BalTaxPayable": "0"
-          },
-          "refund": {
-            "BankAccountDtls": {
-              "PriBankDetails": {
-                "IFSCCode": "SBIN0000454",
-                "BankName": "SBI",
-                "BankAccountNo": "931815897678"
-              }
-            },
-            "RefundDue": "0"
-          }
-        },
-        "2017-18": {
-          "PersonalInfo": {
-            "Address": {
-              "ResidenceNo": "Vikasnagar  West Part R.No.3",
-              "LocalityOrArea": "Tehri Garhwal",
-              "MobileNo": "8765476856",
-              "EmailAddress": "abc@gmail.com",
-              "CityOrTownOrDistrict": "Indore",
-              "State": "Madhya pradesh",
-              "PinCode": "453009"
-            },
-            "EmployerCategory": "Not Applicable",
-            "Status": "RES - Resident",
-            "AadhaarCardNo": "1123457684302546",
-            "PAN": "BFZPT11897",
-            "DOB": "04/04/1982",
-            "Name": "Rahul Gupta"
-          },
-          "ITR1_IncomeDeductions": {
-            "UsrDeductUndChapVIA": {
-              "TotalChapVIADeductions": "0",
-              "Section80GGA": "0",
-              "Section80DDB": "0",
-              "Section80CCG": "0",
-              "Section80CCDEmployer": "0",
-              "Section80QQB": "0",
-              "Section80GGC": "0",
-              "Section80RRB": "0",
-              "Section80TTA": "0",
-              "Section80CCC": "0",
-              "Section80EE": "0"
-            },
-            "TotalIncome": "0"
-          },
-          "ITR1_TaxComputation": {
-            "NetTaxLiability": "0",
-            "IntrstPay": {
-              "IntrstPayUs234A": "0",
-              "IntrstPayUs234B": "0",
-              "IntrstPayUs234C": "0"
-            },
-            "GrossTaxLiability": "0",
-            "Rebate87A": "0",
-            "TaxPayableOnRebate": "0",
-            "TotalTaxPayable": "0",
-            "Section89": "0"
-          },
-          "TaxPaid": {
-            "TaxesPaid": {
-              "AdvanceTax": "0",
-              "TCS": "0",
-              "TotalTaxesPaid": "0",
-              "SelfAssessmentTax": "0",
-              "TDS": "0"
-            },
-            "BalTaxPayable": "0"
-          },
-          "refund": {
-            "BankAccountDtls": {
-              "PriBankDetails": {
-                "IFSCCode": "YESB0000008",
-                "BankName": "YESBANK"
-              }
-            },
-            "RefundDue": "0"
-          }
+  "pan_id": "ABCDE1234F",
+  "result": {
+    "PersonalInfo": {
+      "Name": " String ",
+      "Father Name": "Sanjay Bansal",
+      "AssesseeName": {
+        "FirstName": " Rajat ",
+        "MiddleName": " ",
+        "LastName": " Bansal "
+      },
+      "PAN": " ABCDE1234F ",
+      "DOB": "25-10-1992",
+      "Status": "Active",
+      "AadhaarCardNo": "**** **** 9876",
+      "EmployerCategory": " Government/Public sector undertaking/Pensioners/Others ",
+      "Address": {
+        "ResidenceNo": " H.NO 89 DWARKA NAGAR COACH FACTORY",
+        "ResidenceName": "Rajat Bansal",
+        "RoadOrStreet": "Old post office",
+        "LocalityOrArea": " DWARKA NGAR",
+        "CityOrTownOrDistrict": " BHOPAL",
+        "State": " MADHYA PRADESH",
+        "PinCode": " 462010",
+        "MobileNo": "9999999999",
+        "EmailAddress": " abc@gmail.com ",
+        "Country": "India"
+      }
+    },
+    "ITR1_IncomeDeductions": {
+      "Salary": " Integer ",
+      "IncomeFromSal": " 452000",
+      "AlwnsNotExempt": " 0 ",
+      "PerquisitesValue": " 0 ",
+      "ProfitsInSalary": " 0 ",
+      "DeductionUs16": " 40000 ",
+      "TotalIncomeOfHP": " 0 ",
+      "IncomeOthSrc": " 0 ",
+      "GrossTotIncome": " 412000",
+      "TotalIncome": " 0 ",
+      "UsrDeductUndChapVIA": {
+        "Section80C": " 0 ",
+        "Section80CCC": " 0 ",
+        "Section80CCDEmployeeOrSE": " 0 ",
+        "Section80CCD1B": " 0 ",
+        "Section80CCDEmployer": " 0 ",
+        "Section80CCG": " 0 ",
+        "Section80DD": " 0 ",
+        "Section80DDB": " 0 ",
+        "Section80E": " 195000 ",
+        "Section80EE": " 0 ",
+        "Section80G": " 0 ",
+        "Section80GG": " 30000 ",
+        "Section80GGA": " 0 ",
+        "Section80GGC": " 0 ",
+        "Section80RRB": " 0 ",
+        "Section80QQB": " 0 ",
+        "Section80TTA": " 0 ",
+        "Section80U": " 0 ",
+        "TotalChapVIADeductions": " 225000",
+        "TotalIncome": " 187000 ",
+        "Section80DHealthInsPremium": {
+          "Sec80DHealthInsurancePremiumUsr": " 0 ",
+          "Sec80DMedicalExpenditureUsr": " 0 ",
+          "Sec80DPreventiveHealthCheckUpUsr": " 0 "
         }
       }
-    ]
-  }
+    },
+    "TaxesPaid": {
+      "TCS": " 0 ",
+      "TDS": " 0 ",
+      "OthersInc": {
+        "SEC 10-5-LeaveTravelAllowance": " 0 ",
+        "SEC 10-14-i": " 0 ",
+        "SEC 10-13-A": " 0 "
+      },
+      "TotalTaxesPaid": " 15000 ",
+      "SelfAssessmentTax": " 0 ",
+      "AdvanceTax": " 0 "
+    },
+    "BalTaxPayable": " Integer ",
+    "ITR1_TaxComputation": {
+      "TotalIntrstPay": " 0 ",
+      "Section89": " 0 ",
+      "NetTaxLiability": " 0 ",
+      "Rebate87A": " 0 ",
+      "GrossTaxLiability": " 0 ",
+      "TotalTaxPayable": " 0 ",
+      "TotTaxPlusIntrstPay": " 0 ",
+      "TaxPayableOnRebate": " 0 ",
+      "EducationCess": " 0 ",
+      "IntrstPay": {
+        "IntrstPayUs234A": " 0 ",
+        "IntrstPayUs234C": " 0 ",
+        "IntrstPayUs234B": " 0 "
+      }
+    },
+    "refund": {
+      "RefundDue": "15000",
+      "BankAccountDtls": {
+        "PriBankDetails": {
+          "IFSCCode": " ICIC0000558",
+          "BankName": " ICICI BANK LIMITED",
+          "BankAccountNo": " 055811234556"
+        }
+      },
+      "employer": {
+        "tan": " abcde123456",
+        "Name of deductor": "Zoop.one",
+        "Salary": " 240000",
+        "Tax Deducted": "15000"
+      }
+    }
+  },
+  "event": "itr.processed",
+  "request_timestamp": "2020-10-12T11:54:21.249Z",
+  "response_timestamp": "2020-10-12T11:58:25.689Z"
+}
+```
+<a name="26asSuccessWebhookReqBody"></a>
+#### 8.2 26AS SUCCESSFUL REQUEST BODY
+
+```json
+{
+  "id": "<<transaction_id>>",
+  "pan_id": "ABCDE1234F",
+  "result": {
+    "2020-21": {
+      "metadata": {
+        "pan": "ABCDE1234F",
+        "current status of pan": "Active",
+        "financial year": "2020-21",
+        "assessment year": "2021-22",
+        "name of assessee": "ASSESSEE NAME",
+        "address of assessee": "ASSESSEE FULL ADDRESS"
+      },
+      "accordions": {
+        "part_a": {
+          "name": "Details of Tax Deducted at Source",
+          "entries": [
+            {
+              "sr_no": 1,
+              "deductor_name": "YOUR CO. PRIVATE LIMITED",
+              "tan": "ABCDE1234F",
+              "total_amount_credited": "100000.00",
+              "total_tax_deducted": "1000.00",
+              "total_tds_deposited": "1000.00",
+              "transactions": [
+                {
+                  "sr_no": 1,
+                  "section": "192",
+                  "transaction_date": "30-Jun-2020",
+                  "booking_status": "F",
+                  "booking_date": "21-Jul-2020",
+                  "remarks": "-",
+                  "amount_credited": "10000.00",
+                  "tax_deducted": "1000.00",
+                  "tds_deposited": "1000.00"
+                },
+                {
+                  "sr_no": 2,
+                  "section": "192",
+                  "transaction_date": "31-May-2020",
+                  "booking_status": "F",
+                  "booking_date": "21-Jul-2020",
+                  "remarks": "-",
+                  "amount_credited": "10000.00",
+                  "tax_deducted": "1000.00",
+                  "tds_deposited": "1000.00"
+                },
+                {
+                  "sr_no": 3,
+                  "section": "192",
+                  "transaction_date": "30-Apr-2020",
+                  "booking_status": "F",
+                  "booking_date": "21-Jul-2020",
+                  "remarks": "-",
+                  "amount_credited": "10000.00",
+                  "tax_deducted": "1000.00",
+                  "tds_deposited": "1000.00"
+                }
+              ]
+            }
+          ]
+        },
+        "part_a1": {
+          "name": "Details of Tax Deducted at Source for 15G / 15H",
+          "entries": []
+        },
+        "part_a2": {
+          "name": "Details of Tax Deducted at Source on Sale of Immovable Property u/s 194IA/ TDS on Rent of Property u/s 194IB / TDS on payment to resident contractors and professionals u/s 194M (For Seller/Landlord of Property/Payee of resident contractors and professionals)",
+          "entries": []
+        },
+        "part_b": {
+          "name": "Details of Tax Collected at Source",
+          "entries": []
+        },
+        "part_c": {
+          "name": "Details of Tax Paid (other than TDS or TCS)",
+          "entries": []
+        },
+        "part_d": {
+          "name": "Details of Paid Refund",
+          "entries": []
+        },
+        "part_e": {
+          "name": "Details of SFT Transaction",
+          "entries": []
+        },
+        "part_f": {
+          "name": "Details of Tax Deducted at Source on Sale of Immovable Property u/s 194IA/ TDS on Rent of Property u/s 194IB /TDS on payment to resident contractors and professionals u/s 194M (For Buyer/Tenant of Property /Payer of resident contractors and professionals)",
+          "entries": []
+        },
+        "part_g": {
+          "name": "TDS Defaults* (Processing of Statements)",
+          "entries": []
+        }
+      }
+    },
+    "2019-20": {
+      "metadata": {
+        "pan": "ABCDE1234F",
+        "current status of pan": "Active",
+        "financial year": "2019-20",
+        "assessment year": "2020-21",
+        "name of assessee": "ASSESSEE NAME",
+        "address of assessee": "ASSESSEE ADDRESS"
+      },
+      "accordions": {
+        "part_a": {
+          "name": "Details of Tax Deducted at Source",
+          "entries": [
+            {
+              "sr_no": 1,
+              "deductor_name": "YOUR CO. PRIVATE LIMITED",
+              "tan": "ABCDE1234F",
+              "total_amount_credited": "100000.00",
+              "total_tax_deducted": "1000.00",
+              "total_tds_deposited": "1000.00",
+              "transactions": [
+                {
+                  "sr_no": 1,
+                  "section": "192",
+                  "transaction_date": "01-Apr-2019",
+                  "booking_status": "F",
+                  "booking_date": "30-Jun-2020",
+                  "remarks": "-",
+                  "amount_credited": "100000.00",
+                  "tax_deducted": "1000.00",
+                  "tds_deposited": "1000.00"
+                }
+              ]
+            }
+          ]
+        },
+        "part_a1": {
+          "name": "Details of Tax Deducted at Source for 15G / 15H",
+          "entries": []
+        },
+        "part_a2": {
+          "name": "Details of Tax Deducted at Source on Sale of Immovable Property u/s 194IA/ TDS on Rent of Property u/s 194IB / TDS on payment to resident contractors and professionals u/s 194M (For Seller/Landlord of Property/Payee of resident contractors and professionals)",
+          "entries": []
+        },
+        "part_b": {
+          "name": "Details of Tax Collected at Source",
+          "entries": []
+        },
+        "part_c": {
+          "name": "Details of Tax Paid (other than TDS or TCS)",
+          "entries": []
+        },
+        "part_d": {
+          "name": "Details of Paid Refund",
+          "entries": []
+        },
+        "part_e": {
+          "name": "Details of SFT Transaction",
+          "entries": []
+        },
+        "part_f": {
+          "name": "Details of Tax Deducted at Source on Sale of Immovable Property u/s 194IA/ TDS on Rent of Property u/s 194IB /TDS on payment to resident contractors and professionals u/s 194M (For Buyer/Tenant of Property /Payer of resident contractors and professionals)",
+          "entries": []
+        },
+        "part_g": {
+          "name": "TDS Defaults* (Processing of Statements)",
+          "entries": []
+        }
+      }
+    }
+  },
+  "event": "26as.processed",
+  "request_timestamp": "2020-10-13T10:48:52.791Z",
+  "response_timestamp": "2020-10-13T10:56:34.257Z"
 }
 ```
 
 <a name="itrErrorWebhookReqBody"></a>
-#### 7.2 FAILURE REQUEST BODY
+#### 8.3 FAILURE REQUEST BODY
 
 ```json
 {
   "id": "<<transaction_id>>",
-  "mode": "POPUP",
-  "env": "PRODUCTION",
-  "response_code": "100",
-  "response_message": "Transaction Failed",
-  "phone_number": "<<PHONE>>",
-  "dob": "<<DOB>>",
-  "request_version": "1.0",
-  "pan": "<<PAN_NUMBER>>",
-  "request_medium": "<<web | android | ios>>",
-  "sdk_name": "1",
+  "pan_id": "ABCDE1234F",
+  "event": "itr.failed",
   "error": {
-    "code": "<<error_code>>",
-    "message": "<<error_message>>"
-  }
+    "response_code": "111",
+    "response_message": "Internal Error",
+    "reason_code": "INTERNAL_ERROR",
+    "reason_message": "Something went wrong"
+  },
+  "request_timestamp": "2020-10-12T16:25:20.409Z",
+  "response_timestamp": "2020-10-12T16:28:13.979Z"
 }
 ```
 
+<a name="itrWebhookEventTypes"></a>
+#### 8.4 WEBHOOK EVENT TYPES
+
+To differentiate when and for which product you have received the webhook, you
+can use the `event` property present in the webhook request. Here is a table
+where it's mentioned that which event type you will receive for which product.
+
+If any error occurred in the gateway you will receive `txn.failed` and for
+successfully completion on the gateway you will receive `txn.completed`.
+
+| Event          | ITR | 26AS |
+| -------------- | --- | ---- |
+| txn.completed  | Yes | Yes  |
+| txn.failed     | Yes | Yes  |
+| itr.failed     | Yes | No   |
+| itr.processed  | Yes | No   |
+| 26as.failed    | No  | Yes  |
+| 26as.processed | No  | Yes  |
+
 <a name="itrErrorCodeWebhook"></a>
-#### 7.3 RESPONSE CODES AND MESSAGES
+#### 8.5 REASON & RESPONSE CODES AND MESSAGES
 
-| Code | Billable | Message                    |
-| ---- | -------- | -------------------------- |
-| 101  | true     | Transaction Successful     |
-| 601  | false    | Unknown Error              |
-| 602  | false    | Unable to download ITR     |
-| 603  | false    | Unable to process response |
-| 604  | false    | Unable to submit the OTP   |
-| 605  | false    | Unable to parse ITR        |
-| 606  | false    | Session expired or invalid |
-| 609  | false    | Consent Denied             |
-| 610  | false    | Gateway Terminated         |
-| 611  | false    | Service unavailable        |
+In case of error you might receive these values in the reason_code, reason_message, response_code, and response_message.
 
+| reason_code             | reason_message                                                      | response_code | response_message              |
+| ----------------------- | ------------------------------------------------------------------- | ------------- | ----------------------------- |
+| INTERNAL_ERROR          | Something went wrong                                                | 111           | Internal Error                |
+| SOURCE_ERROR            | Unable to reach the source at this time. Please try after sometime. | 108           | Source Error                  |
+| PAN_NOT_ADDED           | PAN access was removed by customer                                  | 111           | Internal Error                |
+| SOURCE_DOWN             | Unable to reach the source at this time. Please try after sometime. | 110           | Source Down                   |
+| PARSING_FAILED          | Unable to fetch details from source file                            | 111           | Internal Error                |
+| PARSING_FAILED          | Unable to fetch details from source file                            | 111           | Internal Error                |
+| ITD_PAN_ALREADY_ADDED   | PAN Number already added with Income Tax Department                 | 106           | Invalid combination of inputs |
+| ITD_PAN_NOT_EXIST       | Unable to fetch the PAN Number entered from the Income Tax records  | 101           | No Records Found              |
+| ITD_DOB_MISSING         | Date of birth missing                                               | 106           | Invalid combination of inputs |
+| ITD_INVALID_DOB_PATTERN | Invalid date of birth pattern                                       | 106           | Invalid combination of inputs |
+| ITD_INVALID_DOB         | Date of birth invalid                                               | 106           | Invalid combination of inputs |
+| ITD_INVALID_PAN_FORMAT  | PAN format invalid                                                  | 106           | Invalid combination of inputs |
+| ITD_PAN_NOT_REGISTERED  | Unable to fetch the PAN Number entered from the Income Tax records  | 101           | No Records Found              |
+| ITD_MOBILE_OTP_EMPTY    | Mobile OTP required                                                 | 106           | Invalid combination of inputs |
+| ITD_EMAIL_OTP_EMPTY     | Email OTP required                                                  | 106           | Invalid combination of inputs |
+| ITD_INVALID_MOBILE_OTP  | Mobile OTP is invalid                                               | 106           | Invalid combination of inputs |
+| ITD_INVALID_EMAIL_OTP   | Email OTP is invalid                                                | 106           | Invalid combination of inputs |
+| ITD_INCORRECT_OTP       | Email and Mobile OTP invalid                                        | 106           | Invalid combination of inputs |
 
 
 ## Zoop.one Bank Statement Analysis(BSA) Gateway 
