@@ -4,7 +4,7 @@ AadhaarAPI | Zoop IOS SDK for Income Tax Return and Bank Statement Analysis Gate
 
 # Table of Contents
 
-## Zoop.one Income Tax Department(ITR) Gateway (Beta)  
+## Zoop.one Income Tax Department V2.0(ITD) Gateway (Beta)  
 1. [INTRODUCTION](#itrIntroduction)
 2. [PROCESS FLOW](#itrProcessFlow)
 3. [INITIATING A GATEWAY TRANSACTION](#itrInit)
@@ -24,7 +24,7 @@ AadhaarAPI | Zoop IOS SDK for Income Tax Return and Bank Statement Analysis Gate
    - [ERROR JSON RESPONSE FORMAT FOR ITR ERROR](#itrRespErrorMobile)
    - [EVENT- ITD CONSENT DENIED](#itrRespErrorConsentDenied)
    - [[EVENT- ITD GATEWAY TERMINATED](#itrRespErrorGatewayTerminated)
-8. [Handling Webhook Response](#itrWebhook)
+8. [HANDLING WEBHOOK RESPONSE](#itrWebhook)
    - [SUCCESSFUL REQUEST BODY](#itrSuccessWebhookReqBody)
    - [FAILURE REQUEST BODY](#itrErrorWebhookReqBody)
    - [26AS SUCCESSFUL REQUEST BODY](#26asSuccessWebhookReqBody)
@@ -83,7 +83,7 @@ AadhaarAPI | Zoop IOS SDK for Income Tax Return and Bank Statement Analysis Gate
 9. [PULLING TRANSACTION STATUS AT BACKEND](#esignStatus)
    - [RESPONSE PARAMS](#esignStatusResp)
    
-## Zoop.one Income Tax Department(ITR) Gateway (Beta)
+## Zoop.one Income Tax Department V2.0(ITD) Gateway (Beta)
 
 <a name="itrIntroduction"></a>
 ### 1. INTRODUCTION
@@ -93,8 +93,8 @@ Income tax return is a form where a person submits information about his income 
 <a name="itrProcessFlow"></a>
 ### 2. PROCESS FLOW
 1. At your backend server, Initiate the **ITD** transaction using a simple Rest API [POST] call. Details of these are available in the documents later. You will require API key and Agency Id for accessing this API which can be generated from the Dashboard.
-2. This gateway transaction id then needs to be communicated back to the frontend(in Android Project) where SDK is to be called.
-3. After adding the Framework in your ios project, client has to pass the above generated transaction id to a Framework View Controller, which will open the Framework.
+2. This gateway transaction id then needs to be communicated back to the frontend(in IOS Project) where SDK is to be called.
+3. After adding the Framework in your IOS project, client has to pass the above generated transaction id to a Framework View Controller, which will open the Framework.
 4. Framework will open with a user login after which and the rest of the process till response will be handled by the gateway itself.
 5. Once the transaction is successful or failed, appropriate handler function will be called with response JSON, that can be used by the client to process the flow further. 
 6. Client will also have a REST API available to pull the status of a gateway transaction from backend. 
