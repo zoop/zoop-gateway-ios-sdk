@@ -32,12 +32,12 @@ class ZoopHandler{
         
         
         var zoopComponents = URLComponents()
-        zoopComponents.scheme = "https"
         if ReqObject.zoop_env == "QT_P" {
             zoopComponents.host = "itd.zoop.one"
+            zoopComponents.scheme = "https"
         }else if ReqObject.zoop_env == "QT_PP"{
             zoopComponents.host = "itd-staging.zoop.one"
-
+            zoopComponents.scheme = "https"
         }else if ReqObject.zoop_env == "QT_T"{
             zoopComponents.host = "develop.itd.zoop.one.s3-website.ap-south-1.amazonaws.com"
             zoopComponents.scheme = "http"

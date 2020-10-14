@@ -55,7 +55,7 @@ class ViewController: UIViewController {
             RequestParams.zoop_result_storyboard = "Main"
             RequestParams.zoop_result_storyboard_id = "ViewController"
             
-            RequestParams.zoop_req_type = ZOOP_REQ_ITR
+            RequestParams.zoop_req_type = ZOOP_REQ_ITR  //ZOOP_REQ_ESIGN, ZOOP_REQ_BSA
             
 //            if RequestParams.qt_req_type == QT_REQ_OFFLINEAADHAAR {
 //                RequestParams.qt_validate_phone = "y"
