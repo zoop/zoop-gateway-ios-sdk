@@ -15,28 +15,7 @@ class ZoopHandler{
         
         var zoopComponents = URLComponents()
         zoopComponents.scheme = "https"
-        //        if ReqObject.zoop_env == "QT_P" {
-        //            zoopComponents.host = "prod.aadhaarapi.com"
-        //            print(zoopLogTag, zoopLogTypeI, "env: Prod")
-        //
-        //        }else if ReqObject.zoop_env == "QT_PP"{
-        //            zoopComponents.host = "preprod.aadhaarapi.com"
-        //            print(zoopLogTag, zoopLogTypeI, "env: PreProd");
-        //
-        //        }else if ReqObject.zoop_env == "QT_T"{
-        //            zoopComponents.host = "test.aadhaarapi.com"
-        //            print(zoopLogTag, zoopLogTypeI, "env: Test")
-        //
-        //        }else if ReqObject.zoop_env == "QT_L"{
-        //            zoopComponents.scheme = "http"
-        //            zoopComponents.host = "103.3.40.138"
-        //            print(zoopLogTag, zoopLogTypeI, "env: Local")
-        //
-        //        }else {
-        //            let qtUrlString = "https://InvalidBaseUrl"
-        //            let qtUrl = URL(string: qtUrlString)
-        //            return qtUrl!
-        //        }
+       
         zoopComponents.host = "bsa.aadhaarapi.com"
         
         let zoopSessionId = URLQueryItem(name: "session_id", value: ReqObject.zoop_gateway_id)
@@ -51,9 +30,22 @@ class ZoopHandler{
     
     func generateItrURL(ReqObject: ZoopDataObject) -> URL {
         
+        
         var zoopComponents = URLComponents()
-        zoopComponents.scheme = "https"
-        zoopComponents.host = "itr.zoop.one"
+        if ReqObject.zoop_env == "QT_P" {
+            zoopComponents.host = "itd.zoop.one"
+            zoopComponents.scheme = "https"
+        }else if ReqObject.zoop_env == "QT_PP"{
+            zoopComponents.host = "itd-staging.zoop.one"
+            zoopComponents.scheme = "https"
+        }else if ReqObject.zoop_env == "QT_T"{
+            zoopComponents.host = "develop.itd.zoop.one.s3-website.ap-south-1.amazonaws.com"
+            zoopComponents.scheme = "http"
+        }else {
+            let qtUrlString = "https://InvalidBaseUrl"
+            let qtUrl = URL(string: qtUrlString)
+            return qtUrl!
+        }
         
         let zoopSessionId = URLQueryItem(name: "session_id", value: ReqObject.zoop_gateway_id)
         let zoopPlatform = URLQueryItem(name: "platform", value: "ios")
